@@ -1,0 +1,119 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "semantic-router"
+version = "0.1.0"
+description = "Production-ready semantic router library, API, and examples."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "GitHub Copilot" }]
+dependencies = [
+  "numpy>=1.26",
+  "sentence-transformers>=3.0",
+  "fastapi>=0.111",
+  "uvicorn[standard]>=0.29",
+  "pydantic>=2.7",
+  "structlog>=24.1",
+  "diskcache>=5.6",
+  "tqdm>=4.66",
+  "httpx>=0.27",
+  "pandas>=2.2",
+  "matplotlib>=3.8",
+  "prometheus-fastapi-instrumentator>=7.0",
+]
+
+[project.optional-dependencies]
+openai = ["openai>=1.30"]
+cohere = ["cohere>=5.5"]
+pinecone = ["pinecone-client>=3.2"]
+dev = [
+  "pytest>=8.2",
+  "pytest-asyncio>=0.23",
+  "pytest-cov>=5.0",
+  "mypy>=1.10",
+  "ruff>=0.4",
+  "httpx>=0.27",
+]
+all = [
+  "openai>=1.30",
+  "cohere>=5.5",
+  "pinecone-client>=3.2",
+  "pytest>=8.2",
+  "pytest-asyncio>=0.23",
+  "pytest-cov>=5.0",
+  "mypy>=1.10",
+  "ruff>=0.4",
+]
+
+[project.urls]
+Homepage = "https://github.com/example/semantic-router"
+Repository = "https://github.com/example/semantic-router"
+
+[tool.setuptools.packages.find]
+include = ["semantic_router*", "api*"]
+
+[tool.pytest.ini_options]
+addopts = "-q --cov=semantic_router --cov-report=term-missing"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+namespace_packages = true
+warn_unused_configs = true
+show_error_codes = true
+disable_error_code = ["type-arg"]
+
+[[tool.mypy.overrides]]
+module = [
+  "sentence_transformers",
+  "sentence_transformers.*",
+  "diskcache",
+  "diskcache.*",
+  "openai",
+  "openai.*",
+  "cohere",
+  "cohere.*",
+  "pinecone",
+  "pinecone.*",
+  "prometheus_fastapi_instrumentator",
+  "prometheus_fastapi_instrumentator.*",
+  "prometheus_client",
+  "prometheus_client.*",
+  "pandas",
+  "tqdm",
+  "tqdm.*",
+  "matplotlib",
+  "matplotlib.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+  "semantic_router.encoders.openai",
+  "semantic_router.encoders.cohere",
+  "semantic_router.encoders.sentence_transformers",
+  "semantic_router.index.pinecone",
+]
+disable_error_code = ["arg-type", "no-any-return"]
+
+[tool.coverage.run]
+omit = [
+  "semantic_router/encoders/sentence_transformers.py",
+  "semantic_router/encoders/openai.py",
+  "semantic_router/encoders/cohere.py",
+  "semantic_router/index/pinecone.py",
+]
+
+[tool.coverage.report]
+fail_under = 90
